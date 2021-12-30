@@ -7,6 +7,7 @@ use crate::xwindow;
 pub fn run(cmd_rx: &Receiver<String>) {
     let firefoxes = firefox::firefoxes();
     let xwin = xwindow::XWindow::new();
+    println!("{:?}", xwin.clients());
     println!("firefoxes = {:?}", firefoxes);
     let mut prev_top_pid = xwin.top_pid();
     loop {

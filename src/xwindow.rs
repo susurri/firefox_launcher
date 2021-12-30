@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use x11rb::atom_manager;
 use x11rb::connection::Connection;
 use x11rb::errors::ReplyOrIdError;
@@ -34,8 +35,8 @@ impl XWindow {
         self.pid(self.active_window()) as i32
     }
 
-    pub fn client_list(&self) -> Vec<Window> {
-        let mut clients = vec![];
+    pub fn clients(&self) -> HashMap<i32, Window> {
+        let mut clients = HashMap::<i32, Window>::new();
         if let Ok(c) = self.conn.get_property(
             false,
             self.root,
@@ -47,7 +48,7 @@ impl XWindow {
             if let Ok(p) = c.reply() {
                 if let Some(ws) = p.value32() {
                     for w in ws {
-                        clients.push(w);
+                        clients.insert(self.pid(w) as i32, w);
                     }
                 }
             }
