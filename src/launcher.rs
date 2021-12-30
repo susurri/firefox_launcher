@@ -14,7 +14,7 @@ pub fn run(cmd_rx: &Receiver<String>) {
         std::thread::sleep(Duration::from_secs(1));
         let top_pid = xwin.top_pid();
         if top_pid != prev_top_pid {
-            println!("top pid changed from {} to {}", prev_top_pid, top_pid);
+            println!("top pid changed from {:?} to {:?}", prev_top_pid, top_pid);
         }
         let data = cmd_rx.try_recv();
         if let Ok(s) = data {

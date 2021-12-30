@@ -31,8 +31,8 @@ impl XWindow {
         XWindow { conn, root, atom }
     }
 
-    pub fn top_pid(&self) -> i32 {
-        self.pid(self.active_window()) as i32
+    pub fn top_pid(&self) -> Option<i32> {
+        self.pid(self.active_window())
     }
 
     pub fn clients(&self) -> HashMap<i32, Window> {
@@ -48,7 +48,9 @@ impl XWindow {
             if let Ok(p) = c.reply() {
                 if let Some(ws) = p.value32() {
                     for w in ws {
-                        clients.insert(self.pid(w) as i32, w);
+                        if let Some(pid) = self.pid(w) {
+                            clients.insert(pid, w);
+                        }
                     }
                 }
             }
@@ -56,8 +58,8 @@ impl XWindow {
         clients
     }
 
-    fn pid(&self, w: Window) -> u32 {
-        let reply = get_property(
+    fn pid(&self, w: Window) -> Option<i32> {
+        if let Ok(c) = get_property(
             &self.conn,
             false,
             w,
@@ -65,12 +67,19 @@ impl XWindow {
             AtomEnum::CARDINAL,
             0,
             u32::MAX,
-        )
-        .unwrap()
-        .reply()
-        .unwrap();
-        let mut prop = reply.value32().unwrap();
-        prop.next().unwrap()
+        ) {
+            if let Ok(r) = c.reply() {
+                if let Some(mut prop) = r.value32() {
+                    Some(prop.next().unwrap() as i32)
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
+        } else {
+            None
+        }
     }
 
     fn active_window(&self) -> Window {
