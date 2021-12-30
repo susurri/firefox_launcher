@@ -69,11 +69,7 @@ impl XWindow {
             u32::MAX,
         ) {
             if let Ok(r) = c.reply() {
-                if let Some(mut prop) = r.value32() {
-                    Some(prop.next().unwrap() as i32)
-                } else {
-                    None
-                }
+                r.value32().map(|mut prop| prop.next().unwrap() as i32)
             } else {
                 None
             }
