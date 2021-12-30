@@ -1,0 +1,17 @@
+[package]
+name = "firefox_launcher"
+version = "0.1.0"
+authors = ["susurri <susurrus.silent@gmail.com>"]
+license = "MIT OR Apache-2.0"
+edition = "2021"
+
+[dependencies]
+procfs = { version = "*", default-features = false }
+rust-ini = "*"
+rustyline = "*"
+single-instance = "*"
+x11rb = "0.9"
+xdg = "*"
+serde = { version = "*", features = ["derive"] }
+serde_json = "*"
+libc = "*"
