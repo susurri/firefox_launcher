@@ -109,12 +109,6 @@ fn get_state(pid: i32, name: &str) -> State {
 
 fn get_uptime(p: process::Process) -> u64 {
     let nowsec = SystemTime::now().duration_since(UNIX_EPOCH).unwrap();
-    println!(
-        "{} - {} - {}",
-        nowsec.as_secs(),
-        p.stat.starttime,
-        procfs::boot_time_secs().unwrap()
-    );
     nowsec.as_secs()
         - p.stat.starttime / unsafe { sysconf(_SC_CLK_TCK) } as u64
         - procfs::boot_time_secs().unwrap()
