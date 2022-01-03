@@ -16,3 +16,5 @@ serde = { version = "*", features = ["derive"] }
 serde_json = "*"
 libc = "*"
 nix = "*"
+strum = "*"
+strum_macros = "*"
