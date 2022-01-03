@@ -17,6 +17,7 @@ fn cmd_exec(
                 Ok(m) => {
                     f.mode = m;
                     xwin.update();
+                    f.update(xwin);
                     f.apply_mode(xwin)
                 }
                 _ => println!("No such mode {}", mode),
