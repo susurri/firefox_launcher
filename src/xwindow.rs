@@ -47,20 +47,19 @@ impl XWindow {
     }
 
     pub fn is_top(&self, pid: i32) -> bool {
-        if let Some(top_pid) = self.top_pid {
-            let p = process::Process::new(pid);
-            let top_p = process::Process::new(top_pid);
-            if let (Ok(proc), Ok(top_proc)) = (p, top_p) {
-                if let (Ok(pstat), Ok(top_pstat)) = (proc.stat(), top_proc.stat()) {
-                    pstat.pgrp == top_pstat.pgrp
-                } else {
-                    false
+        match self.top_pid {
+            Some(top_pid) => {
+                let p = process::Process::new(pid);
+                let top_p = process::Process::new(top_pid);
+                match (p, top_p) {
+                    (Ok(proc), Ok(top_proc)) => match (proc.stat(), top_proc.stat()) {
+                        (Ok(pstat), Ok(top_pstat)) => pstat.pgrp == top_pstat.pgrp,
+                        _ => false,
+                    },
+                    _ => false,
                 }
-            } else {
-                false
             }
-        } else {
-            false
+            _ => false,
         }
     }
 
@@ -92,7 +91,7 @@ impl XWindow {
     }
 
     fn pid(&self, w: Window) -> Option<i32> {
-        if let Ok(c) = get_property(
+        match get_property(
             &self.conn,
             false,
             w,
@@ -101,13 +100,11 @@ impl XWindow {
             0,
             u32::MAX,
         ) {
-            if let Ok(r) = c.reply() {
-                r.value32().map(|mut prop| prop.next().unwrap() as i32)
-            } else {
-                None
-            }
-        } else {
-            None
+            Ok(c) => match c.reply() {
+                Ok(r) => r.value32().map(|mut prop| prop.next().unwrap() as i32),
+                _ => None,
+            },
+            _ => None,
         }
     }
 
