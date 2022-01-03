@@ -140,12 +140,15 @@ impl XWindow {
             self.atom._NET_CLOSE_WINDOW,
             ClientMessageData::from([0u32; 5]),
         );
-        let _ = send_event(
+        let result = send_event(
             &self.conn,
             false,
-            w,
-            EventMask::STRUCTURE_NOTIFY | EventMask::SUBSTRUCTURE_REDIRECT,
+            self.root,
+            EventMask::SUBSTRUCTURE_NOTIFY | EventMask::SUBSTRUCTURE_REDIRECT,
             msg,
         );
+        if let Err(err) = result {
+            println!("Error in XWindow::close : {:?}", err);
+        }
     }
 }
