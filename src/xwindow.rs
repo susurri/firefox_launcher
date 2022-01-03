@@ -126,7 +126,11 @@ impl XWindow {
     }
 
     pub fn close_pid(&self, pid: i32) {
-        self.close(*self.windows.get(&pid).unwrap());
+        let window = self.windows.get(&pid);
+        match window {
+            Some(w) => self.close(*w),
+            _ => println!("Could not find window of pid {}", pid),
+        }
     }
 
     fn close(&self, w: Window) {

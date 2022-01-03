@@ -6,12 +6,17 @@ use std::time::Duration;
 use crate::firefox;
 use crate::xwindow;
 
-fn cmd_exec(cmd: &str, firefoxes: &mut HashMap<String, firefox::Firefox>, xwin: &xwindow::XWindow) {
+fn cmd_exec(
+    cmd: &str,
+    firefoxes: &mut HashMap<String, firefox::Firefox>,
+    xwin: &mut xwindow::XWindow,
+) {
     match cmd.split_whitespace().collect::<Vec<&str>>()[..] {
         ["set", name, mode] => match firefoxes.get_mut(name) {
             Some(f) => match firefox::Mode::from_str(mode) {
                 Ok(m) => {
                     f.mode = m;
+                    xwin.update();
                     f.apply_mode(xwin)
                 }
                 _ => println!("No such mode {}", mode),
@@ -44,7 +49,7 @@ pub fn run(cmd_rx: &Receiver<String>) {
         }
         while let Ok(s) = cmd_rx.try_recv() {
             println!("{} received", s);
-            cmd_exec(&s, &mut firefoxes, &xwin);
+            cmd_exec(&s, &mut firefoxes, &mut xwin);
         }
         prev_top_pid = top_pid;
     }
