@@ -92,29 +92,22 @@ impl Firefox {
                 _ => (),
             },
             State::Warming => {
-                if let Mode::Off = self.mode {
+                if let (Mode::Off, Some(pid)) = (self.mode, self.pid) {
+                    xwin.close_pid(pid);
+                    self.state = State::ShuttingDown;
+                }
+            }
+            State::Warmed => match self.mode {
+                Mode::Auto if !self.is_top => self.suspend(),
+                Mode::Off => {
                     if let Some(pid) = self.pid {
                         xwin.close_pid(pid);
                         self.state = State::ShuttingDown;
                     }
                 }
-            }
-            State::Warmed => {
-                if !self.is_top && self.mode == Mode::Auto {
-                    self.suspend();
-                } else {
-                    match self.mode {
-                        Mode::Off => {
-                            if let Some(pid) = self.pid {
-                                xwin.close_pid(pid);
-                                self.state = State::ShuttingDown;
-                            }
-                        }
-                        Mode::Suspend => self.suspend(),
-                        _ => (),
-                    }
-                }
-            }
+                Mode::Suspend => self.suspend(),
+                _ => (),
+            },
             State::Suspend => match self.mode {
                 Mode::Auto if self.is_top => self.resume(),
                 Mode::On => self.resume(),
