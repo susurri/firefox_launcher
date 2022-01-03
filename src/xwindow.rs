@@ -11,6 +11,8 @@ pub struct XWindow {
     conn: RustConnection,
     root: Window,
     atom: AtomCollection,
+    pub windows: HashMap<i32, Window>,
+    pub top_pid: Option<i32>,
 }
 
 atom_manager! {
@@ -28,7 +30,19 @@ impl XWindow {
         let screen = &conn.setup().roots[screen_num];
         let root = screen.root;
         let atom = AtomCollection::new(&conn).unwrap().reply().unwrap();
-        XWindow { conn, root, atom }
+        let windows = HashMap::new();
+        XWindow {
+            conn,
+            root,
+            atom,
+            windows,
+            top_pid: None,
+        }
+    }
+
+    pub fn update(&mut self) {
+        self.windows = self.clients();
+        self.top_pid = self.top_pid();
     }
 
     pub fn top_pid(&self) -> Option<i32> {
@@ -95,7 +109,11 @@ impl XWindow {
         prop.next().unwrap()
     }
 
-    pub fn close(&self, w: Window) {
+    pub fn close_pid(&self, pid: i32) {
+        self.close(*self.windows.get(&pid).unwrap());
+    }
+
+    fn close(&self, w: Window) {
         let msg = ClientMessageEvent::new(
             32,
             w,

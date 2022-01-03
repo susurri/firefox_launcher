@@ -14,6 +14,7 @@ use std::thread;
 mod config;
 mod firefox;
 mod launcher;
+mod proc;
 mod xwindow;
 
 fn main() {
@@ -35,6 +36,9 @@ fn main() {
         let readline = rl.readline(">> ");
         match readline {
             Ok(line) => {
+                if line.trim().is_empty() {
+                    continue;
+                }
                 cmd_tx.send(line.clone()).unwrap();
                 rl.add_history_entry(line.as_str());
                 println!("Line: {}", line);
