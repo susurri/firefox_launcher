@@ -12,6 +12,7 @@ use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
+use strum_macros::EnumString;
 
 const FIREFOX_DIR: &str = ".mozilla/firefox";
 const WARMUP_TIME: u64 = 300; // 300 secs to warm up
@@ -23,13 +24,19 @@ struct Profile {
     is_relative: bool,
 }
 
-#[derive(Debug, PartialEq, Clone, Copy, Deserialize)]
+#[derive(Debug, PartialEq, Clone, Copy, Deserialize, EnumString)]
 pub enum Mode {
+    #[strum(ascii_case_insensitive)]
     Auto,
+    #[strum(ascii_case_insensitive)]
     On,
+    #[strum(ascii_case_insensitive)]
     Off,
+    #[strum(ascii_case_insensitive)]
     Suspend,
+    #[strum(ascii_case_insensitive)]
     AsIs,
+    #[strum(ascii_case_insensitive)]
     None,
 }
 
@@ -49,7 +56,7 @@ pub struct Firefox {
     pid: Option<i32>,
     state: State,
     is_top: bool,
-    mode: Mode,
+    pub mode: Mode,
     pidlink: PathBuf,
 }
 
