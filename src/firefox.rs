@@ -74,7 +74,7 @@ impl Firefox {
     pub fn update(&mut self, xwin: &XWindow) {
         let pid = get_pid(&self.pidlink);
         let (state, is_top) = match pid {
-            Some(p) => (get_state(p, &self.name), Some(p) == xwin.top_pid),
+            Some(p) => (get_state(p, &self.name), xwin.is_top(p)),
             _ => (State::Down, false),
         };
         self.pid = pid;

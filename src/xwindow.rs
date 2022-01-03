@@ -1,3 +1,4 @@
+use procfs::process;
 use std::collections::HashMap;
 use x11rb::atom_manager;
 use x11rb::connection::Connection;
@@ -43,6 +44,24 @@ impl XWindow {
     pub fn update(&mut self) {
         self.windows = self.clients();
         self.top_pid = self.top_pid();
+    }
+
+    pub fn is_top(&self, pid: i32) -> bool {
+        if let Some(top_pid) = self.top_pid {
+            let p = process::Process::new(pid);
+            let top_p = process::Process::new(top_pid);
+            if let (Ok(proc), Ok(top_proc)) = (p, top_p) {
+                if let (Ok(pstat), Ok(top_pstat)) = (proc.stat(), top_proc.stat()) {
+                    pstat.pgrp == top_pstat.pgrp
+                } else {
+                    false
+                }
+            } else {
+                false
+            }
+        } else {
+            false
+        }
     }
 
     pub fn top_pid(&self) -> Option<i32> {
