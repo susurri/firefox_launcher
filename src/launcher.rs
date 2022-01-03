@@ -10,15 +10,12 @@ pub fn run(cmd_rx: &Receiver<String>) {
     for (_, firefox) in firefoxes.iter_mut() {
         firefox.apply_mode(&xwin);
     }
-    //    println!("{:?}", xwin.clients());
-    //    println!("firefoxes = {:?}", firefoxes);
     let mut prev_top_pid = xwin.top_pid();
     loop {
         std::thread::sleep(Duration::from_secs(1));
         let top_pid = xwin.top_pid();
         if top_pid != prev_top_pid {
             xwin.update();
-            println!("top pid changed from {:?} to {:?}", prev_top_pid, top_pid);
             for (_, firefox) in firefoxes.iter_mut() {
                 firefox.update(&xwin);
                 firefox.apply_mode(&xwin);
