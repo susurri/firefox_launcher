@@ -32,9 +32,28 @@ fn cmd_exec(
             f.update(xwin);
             f.apply_mode(xwin)
         }),
-        ["list"] => firefoxes
-            .iter()
-            .for_each(|(name, firefox)| println!("{}  {:?}", name, firefox.mode)),
+        ["list"] => {
+            let mut f = firefoxes
+                .iter()
+                .collect::<Vec<(&String, &firefox::Firefox)>>();
+            f.sort_by(|x, y| x.0.cmp(y.0));
+            let width = f
+                .iter()
+                .max_by(|x, y| x.0.len().cmp(&y.0.len()))
+                .unwrap()
+                .0
+                .len();
+            println!();
+            f.iter().for_each(|(name, firefox)| {
+                println!(
+                    "{:<w$}     {:<6}  {:?}",
+                    name,
+                    format!("{:?}", firefox.mode),
+                    firefox.state,
+                    w = width
+                )
+            })
+        }
         _ => println!("Unknown command"),
     }
 }

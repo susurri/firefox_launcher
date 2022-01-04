@@ -54,7 +54,7 @@ pub enum State {
 pub struct Firefox {
     name: String,
     pid: Option<i32>,
-    state: State,
+    pub state: State,
     is_top: bool,
     pub mode: Mode,
     pidlink: PathBuf,
