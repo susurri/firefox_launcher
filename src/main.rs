@@ -1,6 +1,5 @@
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
-use single_instance::SingleInstance;
 use std::process::exit;
 use std::sync::mpsc;
 use std::thread;
@@ -8,12 +7,13 @@ use std::thread;
 mod config;
 mod firefox;
 mod launcher;
+mod lock;
 mod proc;
 mod xwindow;
 
 fn main() {
-    let instance = SingleInstance::new("firefox-launcher").unwrap();
-    if !instance.is_single() {
+    let lockfile = lock::Lockfile::new();
+    if !lockfile.is_single {
         eprintln!("Another firefox-launcher is running");
         exit(1);
     }
