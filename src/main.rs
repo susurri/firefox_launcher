@@ -35,7 +35,6 @@ fn main() {
                 }
                 cmd_tx.send(line.clone()).unwrap();
                 rl.add_history_entry(line.as_str());
-                println!("Line: {}", line);
             }
             Err(ReadlineError::Interrupted) => {
                 println!("CTRL-C");
