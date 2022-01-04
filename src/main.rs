@@ -33,6 +33,9 @@ fn main() {
         let readline = rl.readline(">> ");
         match readline {
             Ok(line) => {
+                if let "exit" | "quit" = line.as_str() {
+                    break;
+                }
                 if line.trim().is_empty() {
                     continue;
                 }

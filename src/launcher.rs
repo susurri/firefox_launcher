@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::process;
 use std::str::FromStr;
 use std::sync::mpsc::Receiver;
 use std::time::Duration;
@@ -25,7 +24,6 @@ fn cmd_exec(
             },
             _ => println!("No profile name {} found", name),
         },
-        ["exit"] => process::exit(0),
         ["shutdown"] => firefoxes.iter_mut().for_each(|(_, f)| {
             f.mode = firefox::Mode::Off;
             xwin.update();
