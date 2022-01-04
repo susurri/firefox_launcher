@@ -236,10 +236,10 @@ pub fn firefoxes(xwin: &XWindow) -> HashMap<String, Firefox> {
     let mut firefoxes = HashMap::<String, Firefox>::new();
     let configs = config::configs();
     for p in profiles() {
-        let mode = match configs.iter().find(|&x| x.Name == p.name) {
-            Some(c) => match c.Mode {
+        let mode = match configs.iter().find(|&x| x.name == p.name) {
+            Some(c) => match c.mode {
                 Mode::None => Mode::AsIs,
-                _ => c.Mode,
+                _ => c.mode,
             },
             _ => Mode::AsIs,
         };

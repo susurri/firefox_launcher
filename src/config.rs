@@ -6,9 +6,10 @@ use std::io::BufReader;
 const CONF_FILENAME: &str = "config.json";
 
 #[derive(Deserialize, Debug)]
+#[serde(rename_all = "PascalCase")]
 pub struct Config {
-    pub Name: String,
-    pub Mode: firefox::Mode,
+    pub name: String,
+    pub mode: firefox::Mode,
 }
 
 pub fn configs() -> Vec<Config> {

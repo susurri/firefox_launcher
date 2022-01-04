@@ -2,10 +2,8 @@ use procfs::process;
 use std::collections::HashMap;
 use x11rb::atom_manager;
 use x11rb::connection::Connection;
-use x11rb::errors::ReplyOrIdError;
 use x11rb::protocol::xproto::*;
 use x11rb::rust_connection::RustConnection;
-use x11rb::COPY_DEPTH_FROM_PARENT;
 
 #[derive(Debug)]
 pub struct XWindow {
