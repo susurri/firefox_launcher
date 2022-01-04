@@ -23,7 +23,9 @@ fn main() {
     });
     // `()` can be used when no completer is required
     let mut rl = Editor::<()>::new();
-    if rl.load_history("history.txt").is_err() {
+    let xdg_dir = xdg::BaseDirectories::with_prefix("firefox-launcher").unwrap();
+    let history_file = xdg_dir.place_data_file("history.txt").unwrap();
+    if rl.load_history(&history_file).is_err() {
         println!("No previous history.");
     }
     loop {
@@ -50,5 +52,5 @@ fn main() {
             }
         }
     }
-    rl.save_history("history.txt").unwrap();
+    rl.save_history(&history_file).unwrap();
 }
