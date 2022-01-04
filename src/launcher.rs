@@ -57,7 +57,6 @@ pub fn run(cmd_rx: &Receiver<String>) {
             }
         }
         while let Ok(s) = cmd_rx.try_recv() {
-            println!("{} received", s);
             cmd_exec(&s, &mut firefoxes, &mut xwin);
         }
         prev_top_pid = top_pid;
