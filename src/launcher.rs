@@ -33,6 +33,7 @@ fn cmd_exec(
             f.apply_mode(xwin)
         }),
         ["list"] => {
+            firefoxes.iter_mut().for_each(|(_, f)| f.update(xwin));
             let mut f = firefoxes
                 .iter()
                 .collect::<Vec<(&String, &firefox::Firefox)>>();
