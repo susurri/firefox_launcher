@@ -1,3 +1,4 @@
+use crate::common;
 use crate::firefox;
 use serde::Deserialize;
 use std::fs::File;
@@ -13,7 +14,7 @@ pub struct Config {
 }
 
 pub fn configs() -> Vec<Config> {
-    let xdg_dirs = xdg::BaseDirectories::with_prefix("firefox-launcher").unwrap();
+    let xdg_dirs = xdg::BaseDirectories::with_prefix(common::XDG_PREFIX).unwrap();
     let path = xdg_dirs.find_config_file(CONF_FILENAME);
     match path {
         Some(p) => {

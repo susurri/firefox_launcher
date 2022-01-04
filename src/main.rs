@@ -4,6 +4,7 @@ use std::process::exit;
 use std::sync::mpsc;
 use std::thread;
 
+mod common;
 mod config;
 mod firefox;
 mod launcher;
@@ -23,8 +24,8 @@ fn main() {
     });
     // `()` can be used when no completer is required
     let mut rl = Editor::<()>::new();
-    let xdg_dir = xdg::BaseDirectories::with_prefix("firefox-launcher").unwrap();
-    let history_file = xdg_dir.place_data_file("history.txt").unwrap();
+    let xdg_dirs = xdg::BaseDirectories::with_prefix(common::XDG_PREFIX).unwrap();
+    let history_file = xdg_dirs.place_data_file("history.txt").unwrap();
     if rl.load_history(&history_file).is_err() {
         println!("No previous history.");
     }

@@ -1,3 +1,4 @@
+use crate::common;
 use nix::fcntl::{flock, FlockArg};
 use std::fs::File;
 use std::os::unix::io::AsRawFd;
@@ -10,7 +11,7 @@ pub struct Lockfile {
 
 impl Lockfile {
     pub fn new() -> Self {
-        let xdg_dirs = xdg::BaseDirectories::with_prefix("firefox-launcher").unwrap();
+        let xdg_dirs = xdg::BaseDirectories::with_prefix(common::XDG_PREFIX).unwrap();
         let path = xdg_dirs.place_runtime_file("lock");
         match path {
             Ok(p) => {
