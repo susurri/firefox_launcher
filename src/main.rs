@@ -7,6 +7,7 @@ use std::thread;
 mod common;
 mod config;
 mod firefox;
+mod help;
 mod launcher;
 mod lock;
 mod proc;
@@ -35,6 +36,10 @@ fn main() {
             Ok(line) => {
                 if let "exit" | "quit" = line.as_str() {
                     break;
+                }
+                if line.as_str() == "help" {
+                    help::help();
+                    continue;
                 }
                 if line.trim().is_empty() {
                     continue;
