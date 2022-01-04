@@ -24,4 +24,4 @@ It may work on the other Linux distributions and window managers.
 
 ## License
 
-The software is available as open source under the terms of the [MIT License](./LICENSE-MIT) or [Apache 2.0 License](./LICENSE-APACHE).
+The software is available as open source under the terms of the [MIT License](./LICENSE-MIT) or the [Apache 2.0 License](./LICENSE-APACHE).
