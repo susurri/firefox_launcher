@@ -24,7 +24,7 @@ fn main() {
         launcher::run(&cmd_rx);
     });
     // `()` can be used when no completer is required
-    let mut rl = Editor::<()>::new();
+    let mut rl = Editor::<()>::new().unwrap();
     let xdg_dirs = xdg::BaseDirectories::with_prefix(common::XDG_PREFIX).unwrap();
     let history_file = xdg_dirs.place_data_file("history.txt").unwrap();
     if rl.load_history(&history_file).is_err() {
