@@ -1,5 +1,5 @@
 use rustyline::error::ReadlineError;
-use rustyline::Editor;
+use rustyline::{DefaultEditor, Result};
 use std::process::exit;
 use std::sync::mpsc;
 use std::thread;
@@ -13,7 +13,7 @@ mod lock;
 mod proc;
 mod xwindow;
 
-fn main() {
+fn main() -> Result<()> {
     let lockfile = lock::Lockfile::new();
     if !lockfile.is_single {
         eprintln!("Another firefox-launcher is running");
@@ -24,7 +24,7 @@ fn main() {
         launcher::run(&cmd_rx);
     });
     // `()` can be used when no completer is required
-    let mut rl = Editor::<()>::new().unwrap();
+    let mut rl = DefaultEditor::new()?;
     let xdg_dirs = xdg::BaseDirectories::with_prefix(common::XDG_PREFIX).unwrap();
     let history_file = xdg_dirs.place_data_file("history.txt").unwrap();
     if rl.load_history(&history_file).is_err() {
@@ -45,7 +45,7 @@ fn main() {
                     continue;
                 }
                 cmd_tx.send(line.clone()).unwrap();
-                rl.add_history_entry(line.as_str());
+                rl.add_history_entry(line.as_str())?;
             }
             Err(ReadlineError::Interrupted) => {
                 println!("CTRL-C");
@@ -62,4 +62,5 @@ fn main() {
         }
     }
     rl.save_history(&history_file).unwrap();
+    Ok(())
 }
