@@ -152,7 +152,7 @@ fn get_state(pid: i32, name: &str) -> State {
     let proc = process::Process::new(pid);
     match proc {
         Ok(p) if p.is_alive() => match p.cmdline() {
-            Ok(v) if !v.is_empty() && v[0].ends_with("/firefox") && v.last().unwrap() == name => {
+            Ok(v) if !v.is_empty() && v[0].ends_with("firefox") && v.last().unwrap() == name => {
                 let uptime = get_uptime(&p);
                 if uptime > WARMUP_TIME {
                     if let Ok(stat) = p.stat() {
