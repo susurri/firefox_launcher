@@ -1,11 +1,10 @@
 use crate::common;
-use nix::fcntl::{flock, FlockArg};
+use nix::fcntl::{Flock, FlockArg};
 use std::fs::File;
-use std::os::unix::io::AsRawFd;
 
 pub struct Lockfile {
     #[allow(dead_code)]
-    file: Option<File>,
+    file: Option<Flock<File>>,
     pub is_single: bool,
 }
 
@@ -22,11 +21,16 @@ impl Lockfile {
                 };
                 match file {
                     Ok(f) => {
-                        let fd = f.as_raw_fd();
-                        let result = flock(fd, FlockArg::LockExclusiveNonblock);
-                        Self {
-                            file: Some(f),
-                            is_single: matches!(result, Ok(_)),
+                        let result = Flock::lock(f, FlockArg::LockExclusiveNonblock);
+                        match result {
+                            Ok(l) => Self {
+                                file: Some(l),
+                                is_single: true,
+                            },
+                            Err(_) => Self {
+                                file: None,
+                                is_single: false,
+                            },
                         }
                     }
                     _ => Self {
