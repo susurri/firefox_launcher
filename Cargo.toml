@@ -1,6 +1,6 @@
 [package]
 name = "firefox-launcher"
-version = "0.1.16"
+version = "0.1.17"
 authors = ["susurri <susurrus.silent@gmail.com>"]
 license = "MIT OR Apache-2.0"
 edition = "2021"
@@ -12,8 +12,8 @@ rust-ini = "0.21"
 rustyline = "14.0"
 x11rb = "0.13"
 xdg = "2.5.2"
-serde = { version = "1.0.197", features = ["derive"] }
-serde_json = "1.0.114"
+serde = { version = "1.0.200", features = ["derive"] }
+serde_json = "1.0.116"
 libc = "0.2"
 nix = { version = "0.28", features = ["fs", "signal"] }
 strum = "0.26"
