@@ -11,7 +11,7 @@ use std::collections::HashMap;
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use strum_macros::EnumString;
 
 const FIREFOX_DIR: &str = ".mozilla/firefox";
@@ -94,6 +94,7 @@ impl Firefox {
             State::Down => match self.mode {
                 Mode::Auto | Mode::On | Mode::Suspend => {
                     self.launch();
+                    std::thread::sleep(Duration::from_secs(1)); // workaround to prevent multiple launching
                     self.state = State::StartingUp;
                 }
                 _ => (),
