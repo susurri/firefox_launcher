@@ -25,7 +25,7 @@ fn main() -> Result<()> {
     });
     // `()` can be used when no completer is required
     let mut rl = DefaultEditor::new()?;
-    let xdg_dirs = xdg::BaseDirectories::with_prefix(common::XDG_PREFIX).unwrap();
+    let xdg_dirs = xdg::BaseDirectories::with_prefix(common::XDG_PREFIX);
     let history_file = xdg_dirs.place_data_file("history.txt").unwrap();
     if rl.load_history(&history_file).is_err() {
         println!("No previous history.");

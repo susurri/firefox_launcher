@@ -14,7 +14,7 @@ pub struct Config {
 }
 
 pub fn configs() -> Vec<Config> {
-    let xdg_dirs = xdg::BaseDirectories::with_prefix(common::XDG_PREFIX).unwrap();
+    let xdg_dirs = xdg::BaseDirectories::with_prefix(common::XDG_PREFIX);
     let path = xdg_dirs.find_config_file(CONF_FILENAME);
     match path {
         Some(p) => {
