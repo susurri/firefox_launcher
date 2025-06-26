@@ -1,6 +1,6 @@
 [package]
 name = "firefox-launcher"
-version = "0.1.29"
+version = "0.1.30"
 authors = ["susurri <susurrus.silent@gmail.com>"]
 license = "MIT OR Apache-2.0"
 edition = "2024"
@@ -9,7 +9,7 @@ readme = "README.md"
 [dependencies]
 procfs = { version = "0.17", default-features = false }
 rust-ini = "0.21"
-rustyline = "15.0"
+rustyline = "16.0"
 x11rb = "0.13"
 xdg = "3.0.0"
 serde = { version = "1.0.219", features = ["derive"] }
